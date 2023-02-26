@@ -4,19 +4,42 @@ const octaveRegex = /([0-9]+)/g;
 
 const notes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 
+const colors = {
+  C: "#f44336",
+  D: "#9c27b0",
+  E: "#3f51b5",
+  F: "#2196f3",
+  G: "#00bcd4",
+  A: "#4caf50",
+  B: "#cddc39",
+};
+
 export type Note = {
-  name: string;
+  name:
+    | "C"
+    | "C#"
+    | "D"
+    | "D#"
+    | "E"
+    | "F"
+    | "F#"
+    | "G"
+    | "G#"
+    | "A"
+    | "A#"
+    | "B";
   octave: number;
   formatted: string;
+  color?: string;
   sharp?: boolean;
 };
 
 export const parseNote = (note: string): Note => {
-  const name = note.match(nameRegex)?.[0];
+  const name = note.match(nameRegex)?.[0] as unknown as Note["name"];
   const modifier = note.match(modifierRegex)?.[0];
   const octave = note.match(octaveRegex)?.[0];
 
-  if (!name || !octave) {
+  if (!name || !octave || notes.indexOf(name) === -1) {
     throw new Error("Invalid note");
   }
 
@@ -25,6 +48,8 @@ export const parseNote = (note: string): Note => {
     octave: parseInt(octave),
     formatted: `${name}${octave}`,
     sharp: modifier ? true : false,
+    // @ts-ignore
+    color: colors[name],
   };
 };
 
@@ -85,7 +110,7 @@ export const shift = (note: Note, interval: number): Note => {
   // Check if the new note is in the next or previous octave
   const octavePass = outofBoundsHigh ? 1 : outofBoundsLow ? -1 : 0;
 
-  const newNote = notes[newNoteRealIndex];
+  const newNote = notes[newNoteRealIndex] as Note["name"];
   const newOctave = octave + octaveDiff + octavePass;
 
   const modifier = newNote?.match(modifierRegex)?.[0];
@@ -95,5 +120,7 @@ export const shift = (note: Note, interval: number): Note => {
     octave: newOctave,
     formatted: `${newNote}${newOctave}`,
     sharp: modifier ? true : false,
+    // @ts-ignore
+    color: colors[newNote],
   };
 };

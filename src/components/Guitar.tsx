@@ -50,7 +50,11 @@ const Fret = ({ notes, open }: FretProps) => {
           <Box
             onClick={() => setSelectedNote(note)}
             backgroundColor={
-              selectedNote?.formatted === note.formatted ? "green" : "white"
+              selectedNote?.formatted === note.formatted
+                ? "green"
+                : !note.sharp
+                ? note.color
+                : "white"
             }
             mt="-30px"
             position="relative"

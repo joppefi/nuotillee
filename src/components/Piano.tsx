@@ -20,7 +20,7 @@ const Piano = () => {
               ? "green"
               : note.sharp
               ? "black"
-              : "white"
+              : note.color
           }
           color={note.sharp ? "white" : "black"}
           position={note.sharp ? "relative" : undefined}
