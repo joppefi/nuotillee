@@ -1,3 +1,7 @@
+## Introduction
+
+`nuotillee` is a simple app for exploring notes on guitar fretboard and piano keyboard. The app is developed purely for my own musical learning purposes.
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
