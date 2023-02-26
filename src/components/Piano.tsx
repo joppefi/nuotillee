@@ -1,4 +1,4 @@
-import { generateNotesBetween } from "@/utils/notes";
+import { generateNotesBetween, Note } from "@/utils/notes";
 import { Flex } from "@chakra-ui/react";
 import React from "react";
 import { useSelections } from "./SelectedContext";
@@ -9,29 +9,49 @@ const Piano = () => {
   return (
     <Flex>
       {notes.map((note) => (
-        <Flex
-          border="1px"
-          w="25px"
-          h={note.sharp ? "75px" : "100px"}
-          justifyContent="center"
-          alignItems="flex-end"
-          backgroundColor={
-            note.formatted === selectedNote?.formatted
-              ? "green"
-              : note.sharp
-              ? "black"
-              : note.color
-          }
-          color={note.sharp ? "white" : "black"}
-          position={note.sharp ? "relative" : undefined}
-          marginLeft={note.sharp ? "-12.5px" : "0px"}
-          marginRight={note.sharp ? "-12.5px" : "0px"}
+        <Key
           key={note.formatted}
+          selected={selectedNote?.formatted === note.formatted}
+          note={note}
           onClick={() => setSelectedNote(note)}
-        >
-          {note.name}
-        </Flex>
+        />
       ))}
+    </Flex>
+  );
+};
+
+type KeyProps = {
+  selected: boolean;
+  note: Note;
+  onClick: () => void;
+};
+
+const Key = ({ selected, note, onClick }: KeyProps) => {
+  return (
+    <Flex
+      border="1px"
+      borderColor="gray.400"
+      w="25px"
+      h={note.sharp ? "75px" : "100px"}
+      justifyContent="center"
+      alignItems="flex-end"
+      backgroundColor={
+        !note.sharp
+          ? !selected
+            ? `${note.color}77`
+            : note.color
+          : selected
+          ? "gray.700"
+          : "black"
+      }
+      color={note.sharp ? "white" : "black"}
+      position={note.sharp ? "relative" : undefined}
+      marginLeft={note.sharp ? "-12.5px" : "0px"}
+      marginRight={note.sharp ? "-12.5px" : "0px"}
+      key={note.formatted}
+      onClick={onClick}
+    >
+      {!note.sharp && note.name}
     </Flex>
   );
 };
