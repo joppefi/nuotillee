@@ -78,13 +78,7 @@ const Note = ({ selected, onClick, note }: NoteProps) => {
       onClick={onClick}
       // Styles for selected note
       backgroundColor={
-        !note.sharp
-          ? !selected
-            ? `${note.color}77`
-            : note.color
-          : selected
-          ? "gray.500"
-          : undefined
+        selected ? note.color : note.sharp ? undefined : `${note.color}77`
       }
       opacity={!note.sharp || selected ? 1 : 0.5}
       // Rest

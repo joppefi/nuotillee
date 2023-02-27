@@ -35,15 +35,7 @@ const Key = ({ selected, note, onClick }: KeyProps) => {
       h={note.sharp ? "75px" : "100px"}
       justifyContent="center"
       alignItems="flex-end"
-      backgroundColor={
-        !note.sharp
-          ? !selected
-            ? `${note.color}77`
-            : note.color
-          : selected
-          ? "gray.700"
-          : "black"
-      }
+      backgroundColor={selected ? note.color : note.sharp ? "black" : "white"}
       color={note.sharp ? "white" : "black"}
       position={note.sharp ? "relative" : undefined}
       marginLeft={note.sharp ? "-12.5px" : "0px"}

@@ -6,11 +6,16 @@ const notes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 
 const colors = {
   C: "#f44336",
+  "C#": "gray.600",
   D: "#9c27b0",
+  "D#": "gray.600",
   E: "#3f51b5",
   F: "#2196f3",
+  "F#": "gray.600",
   G: "#00bcd4",
+  "G#": "gray.600",
   A: "#4caf50",
+  "A#": "gray.600",
   B: "#cddc39",
 };
 
@@ -30,7 +35,7 @@ export type Note = {
     | "B";
   octave: number;
   formatted: string;
-  color?: string;
+  color: string;
   sharp?: boolean;
 };
 
