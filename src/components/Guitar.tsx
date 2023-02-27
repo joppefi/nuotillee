@@ -35,7 +35,7 @@ type FretProps = {
 const fretMarks = [1, 3, 5, 7, 9, 12, 15, 17, 19, 21, 24];
 
 const Fret = ({ notes, open, number }: FretProps) => {
-  const { setSelectedNote, selectedNote } = useSelections();
+  const { setSelectedNote, checkSelected } = useSelections();
   const markedFret = fretMarks.indexOf(number) > -1;
   return (
     <VStack>
@@ -56,7 +56,7 @@ const Fret = ({ notes, open, number }: FretProps) => {
           <Flex mt="-30px" p="2px" position="relative" w="full" h="full">
             <Note
               note={note}
-              selected={selectedNote?.formatted === note.formatted}
+              selected={checkSelected(note)}
               onClick={() => setSelectedNote(note)}
             ></Note>
           </Flex>

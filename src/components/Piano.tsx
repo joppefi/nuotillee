@@ -5,13 +5,13 @@ import { useSelections } from "./SelectedContext";
 
 const Piano = () => {
   const notes = generateNotesBetween("A0", "C8");
-  const { selectedNote, setSelectedNote } = useSelections();
+  const { selectedNote, setSelectedNote, checkSelected } = useSelections();
   return (
     <Flex>
       {notes.map((note) => (
         <Key
           key={note.formatted}
-          selected={selectedNote?.formatted === note.formatted}
+          selected={checkSelected(note)}
           note={note}
           onClick={() => setSelectedNote(note)}
         />
