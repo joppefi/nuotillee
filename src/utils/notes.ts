@@ -5,18 +5,18 @@ const octaveRegex = /([0-9]+)/g;
 const notes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 
 const colors = {
-  C: "#f44336",
+  C: "#5db9e2",
   "C#": "gray.600",
-  D: "#9c27b0",
+  D: "#705ce1",
   "D#": "gray.600",
-  E: "#3f51b5",
-  F: "#2196f3",
+  E: "#dd5fdd",
+  F: "#e0655e",
   "F#": "gray.600",
-  G: "#00bcd4",
+  G: "#e0c95f",
   "G#": "gray.600",
-  A: "#4caf50",
+  A: "#8ddf5f",
   "A#": "gray.600",
-  B: "#cddc39",
+  B: "#5fe09f",
 };
 
 export type Note = {

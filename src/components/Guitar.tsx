@@ -80,6 +80,7 @@ const Note = ({ selected, onClick, note }: NoteProps) => {
       backgroundColor={
         selected ? note.color : note.sharp ? undefined : `${note.color}77`
       }
+      color="black"
       opacity={!note.sharp || selected ? 1 : 0.5}
       // Rest
       justifyContent="center"
