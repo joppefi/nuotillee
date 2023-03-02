@@ -1,7 +1,7 @@
 import { generateNotes, Note } from "@/utils/notes";
 import { Box, Flex, HStack, VStack } from "@chakra-ui/react";
 import React from "react";
-import { useSelections } from "./SelectedContext";
+import { SelectionStatus, useSelections } from "./SelectedContext";
 
 const tuning = ["E4", "B3", "G3", "D3", "A2", "E2"];
 const fretCount = 24;
@@ -56,8 +56,8 @@ const Fret = ({ notes, open, number }: FretProps) => {
           <Flex mt="-30px" p="2px" position="relative" w="full" h="full">
             <Note
               note={note}
-              selected={checkSelected(note)}
-              onClick={() => setSelectedNote(note)}
+              selectionStatus={checkSelected(note)}
+              onClick={() => setSelectedNote(note.formatted)}
             ></Note>
           </Flex>
         </Flex>
@@ -67,12 +67,13 @@ const Fret = ({ notes, open, number }: FretProps) => {
 };
 
 type NoteProps = {
-  selected: boolean;
+  selectionStatus: SelectionStatus;
   onClick: () => void;
   note: Note;
 };
 
-const Note = ({ selected, onClick, note }: NoteProps) => {
+const Note = ({ selectionStatus, onClick, note }: NoteProps) => {
+  const { selected } = selectionStatus;
   return (
     <Flex
       onClick={onClick}

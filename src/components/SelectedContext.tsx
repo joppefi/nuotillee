@@ -2,28 +2,34 @@ import { Note } from "@/utils/notes";
 import React, { createContext, ReactNode, useContext, useState } from "react";
 
 type ContextType = {
-  selectedNote: Note | null;
-  setSelectedNote: (note: Note | null) => void;
-  checkSelected: (note: Note) => boolean;
+  setSelectedNote: (note: string | string[] | null) => void;
+  checkSelected: (note: Note) => SelectionStatus;
+};
+
+export type SelectionStatus = {
+  selected: boolean;
+  tonal?: boolean;
 };
 
 const SelectedContext = createContext<ContextType>({
-  selectedNote: null,
   setSelectedNote: () => {},
-  checkSelected: () => false,
+  checkSelected: () => {
+    return { selected: false };
+  },
 });
 
 export const SelectionProvider = ({ children }: { children: ReactNode }) => {
-  const [selectedNote, setSelectedNote] = useState<Note | null>(null);
+  const [selectedNote, setSelectedNote] = useState<string | string[] | null>(
+    null
+  );
 
   const checkSelected = (note: Note) => {
-    return note.formatted === selectedNote?.formatted;
+    return { selected: note.formatted === selectedNote };
   };
 
   return (
     <SelectedContext.Provider
       value={{
-        selectedNote,
         setSelectedNote,
         checkSelected,
       }}

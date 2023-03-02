@@ -1,19 +1,19 @@
 import { generateNotesBetween, Note } from "@/utils/notes";
 import { Flex } from "@chakra-ui/react";
 import React from "react";
-import { useSelections } from "./SelectedContext";
+import { SelectionStatus, useSelections } from "./SelectedContext";
 
 const Piano = () => {
   const notes = generateNotesBetween("A0", "C8");
-  const { selectedNote, setSelectedNote, checkSelected } = useSelections();
+  const { setSelectedNote, checkSelected } = useSelections();
   return (
     <Flex>
       {notes.map((note) => (
         <Key
           key={note.formatted}
-          selected={checkSelected(note)}
+          selectionStatus={checkSelected(note)}
           note={note}
-          onClick={() => setSelectedNote(note)}
+          onClick={() => setSelectedNote(note.formatted)}
         />
       ))}
     </Flex>
@@ -21,12 +21,13 @@ const Piano = () => {
 };
 
 type KeyProps = {
-  selected: boolean;
+  selectionStatus: SelectionStatus;
   note: Note;
   onClick: () => void;
 };
 
-const Key = ({ selected, note, onClick }: KeyProps) => {
+const Key = ({ selectionStatus, note, onClick }: KeyProps) => {
+  const { selected } = selectionStatus;
   return (
     <Flex
       border="1px"
