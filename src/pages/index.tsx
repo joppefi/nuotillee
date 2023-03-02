@@ -1,5 +1,6 @@
 import Guitar from "@/components/Guitar";
 import Piano from "@/components/Piano";
+import SelectedNotes from "@/components/SelectedNotes";
 import { VStack } from "@chakra-ui/react";
 
 export default function Home() {
@@ -7,6 +8,7 @@ export default function Home() {
     <VStack>
       <Piano />
       <Guitar />
+      <SelectedNotes />
     </VStack>
   );
 }
