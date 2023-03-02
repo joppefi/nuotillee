@@ -1,5 +1,5 @@
 import { generateNotes, Note } from "@/utils/notes";
-import { Box, Flex, HStack, VStack } from "@chakra-ui/react";
+import { Box, Flex, HStack, useColorModeValue, VStack } from "@chakra-ui/react";
 import React from "react";
 import { SelectionStatus, useSelections } from "./SelectedContext";
 
@@ -73,7 +73,9 @@ type NoteProps = {
 };
 
 const Note = ({ selectionStatus, onClick, note }: NoteProps) => {
-  const { selected } = selectionStatus;
+  const { selected, tonic } = selectionStatus;
+  const tonicColor = useColorModeValue("black", "white");
+
   return (
     <Flex
       onClick={onClick}
@@ -81,10 +83,8 @@ const Note = ({ selectionStatus, onClick, note }: NoteProps) => {
       backgroundColor={
         selected ? note.color : note.sharp ? undefined : `${note.color}77`
       }
-      border={selected ? "1px" : undefined}
-      borderColor={
-        selected ? note.color : note.sharp ? undefined : `${note.color}77`
-      }
+      border={selected ? "2px" : undefined}
+      borderColor={tonic ? tonicColor : note.color}
       color="black"
       // Rest
       justifyContent="center"

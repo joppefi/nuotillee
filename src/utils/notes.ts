@@ -6,16 +6,16 @@ const notes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 
 const colors = {
   C: "#5db9e2",
-  "C#": "gray.600",
+  "C#": "gray.400",
   D: "#705ce1",
-  "D#": "gray.600",
+  "D#": "gray.400",
   E: "#dd5fdd",
   F: "#e0655e",
-  "F#": "gray.600",
+  "F#": "gray.400",
   G: "#e0c95f",
-  "G#": "gray.600",
+  "G#": "gray.400",
   A: "#8ddf5f",
-  "A#": "gray.600",
+  "A#": "gray.400",
   B: "#5fe09f",
 };
 
