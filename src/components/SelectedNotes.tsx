@@ -75,21 +75,15 @@ const SelectedNotes = () => {
   return (
     <Box>
       <VStack alignItems="flex-start">
-        <HStack>
-          {Array.isArray(selectedNote)
-            ? selectedNote.map((note) => (
-                <Tag
-                  size="md"
-                  key={note}
-                  borderRadius="full"
-                  bgColor={getNoteColor(note)}
-                  color="black"
-                >
-                  {note}
-                </Tag>
-              ))
-            : selectedNote}
-        </HStack>
+        {selectedNote && (
+          <HStack>
+            {Array.isArray(selectedNote) ? (
+              selectedNote.map((note) => <NoteBadge key={note} note={note} />)
+            ) : (
+              <NoteBadge note={selectedNote} />
+            )}
+          </HStack>
+        )}
         <Input
           placeholder="Add notes"
           value={inputNotes}
@@ -97,6 +91,26 @@ const SelectedNotes = () => {
         />
         <Button onClick={setNotes}>Select notes</Button>
       </VStack>
+    </Box>
+  );
+};
+
+type NoteBadgeProps = {
+  note: string;
+};
+
+const NoteBadge = ({ note }: NoteBadgeProps) => {
+  return (
+    <Box>
+      <Tag
+        size="lg"
+        key={note}
+        borderRadius="full"
+        bgColor={getNoteColor(note)}
+        color="black"
+      >
+        {note}
+      </Tag>
     </Box>
   );
 };
