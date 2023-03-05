@@ -73,7 +73,7 @@ const SelectedNotes = () => {
   };
 
   return (
-    <Box>
+    <Box border="2px" borderColor="gray.500" borderRadius="10" p="5">
       <VStack alignItems="flex-start">
         {selectedNote && (
           <HStack>
@@ -89,7 +89,9 @@ const SelectedNotes = () => {
           value={inputNotes}
           onChange={handleInputChange}
         />
-        <Button onClick={setNotes}>Select notes</Button>
+        <Button isDisabled={inputNotes.length === 0} onClick={setNotes}>
+          Select notes
+        </Button>
       </VStack>
     </Box>
   );
