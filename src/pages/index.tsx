@@ -5,10 +5,10 @@ import { VStack } from "@chakra-ui/react";
 
 export default function Home() {
   return (
-    <VStack>
+    <VStack mx="20" alignItems="flex-start">
       <Piano />
-      <Guitar />
       <SelectedNotes />
+      <Guitar />
     </VStack>
   );
 }
