@@ -16,7 +16,7 @@ const frets = strings[0].map((note, index) => {
 
 const Guitar = () => {
   return (
-    <HStack spacing={0} mt="10" alignItems="flex-end">
+    <HStack spacing={0} mt="10" w="full" alignItems="flex-end">
       {frets.map((notes, index) => (
         <Fret key={index} notes={notes} open={index === 0} number={index} />
       ))}
@@ -37,15 +37,20 @@ const fretMarks = [1, 3, 5, 7, 9, 12, 15, 17, 19, 21, 24];
 const Fret = ({ notes, open, number }: FretProps) => {
   const { setSelectedNote, checkSelected } = useSelections();
   const markedFret = fretMarks.indexOf(number) > -1;
+
+  const fretWidth = 100 / fretCount + 1;
+
   return (
-    <VStack>
+    <VStack w={`${fretWidth}%`}>
       {markedFret && <Flex>{number}</Flex>}
       {notes.map((note, stringIndex) => (
         <Flex
-          id="fret"
+          id="noteContainer"
           key={`${stringIndex}${note.formatted}`}
-          h="34px"
-          w="34px"
+          h="0"
+          w="full"
+          pt="100%"
+          position="relative"
           borderTop={!open ? "1px" : undefined}
           borderTopColor={!open ? "gray.500" : undefined}
           borderRight={stringIndex < tuning.length - 1 ? "1px" : undefined}
@@ -53,7 +58,16 @@ const Fret = ({ notes, open, number }: FretProps) => {
           justifyContent="center"
           alignItems="center"
         >
-          <Flex mt="-30px" p="2px" position="relative" w="full" h="full">
+          <Flex
+            top="0"
+            bottom="0"
+            id="noteSquare"
+            mt="-50%"
+            p="2px"
+            position="absolute"
+            w="full"
+            h="full"
+          >
             <Note
               note={note}
               selectionStatus={checkSelected(note)}
