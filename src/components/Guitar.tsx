@@ -1,5 +1,14 @@
 import { generateNotes, Note } from "@/utils/notes";
-import { Box, Flex, HStack, useColorModeValue, VStack } from "@chakra-ui/react";
+import {
+  Flex,
+  FormControl,
+  FormLabel,
+  HStack,
+  Switch,
+  useBoolean,
+  useColorModeValue,
+  VStack,
+} from "@chakra-ui/react";
 import React from "react";
 import { SelectionStatus, useSelections } from "./SelectedContext";
 
@@ -15,12 +24,26 @@ const frets = strings[0].map((note, index) => {
 });
 
 const Guitar = () => {
+  const [selectedOnly, setSelectedOnly] = useBoolean();
+
   return (
-    <HStack spacing={0} mt="10" w="full" alignItems="flex-end">
-      {frets.map((notes, index) => (
-        <Fret key={index} notes={notes} open={index === 0} number={index} />
-      ))}
-    </HStack>
+    <VStack w="full">
+      <HStack spacing={0} mt="10" w="full" alignItems="flex-end">
+        {frets.map((notes, index) => (
+          <Fret
+            key={index}
+            notes={notes}
+            open={index === 0}
+            number={index}
+            selectedOnly={selectedOnly}
+          />
+        ))}
+      </HStack>
+      <FormControl display="flex" alignItems="center">
+        <FormLabel>Show selected notes only</FormLabel>
+        <Switch isChecked={selectedOnly} onChange={setSelectedOnly.toggle} />
+      </FormControl>
+    </VStack>
   );
 };
 
@@ -30,11 +53,12 @@ type FretProps = {
   notes: Note[];
   open: boolean;
   number: number;
+  selectedOnly: boolean;
 };
 
 const fretMarks = [1, 3, 5, 7, 9, 12, 15, 17, 19, 21, 24];
 
-const Fret = ({ notes, open, number }: FretProps) => {
+const Fret = ({ notes, open, number, selectedOnly }: FretProps) => {
   const { setSelectedNote, checkSelected } = useSelections();
   const markedFret = fretMarks.indexOf(number) > -1;
 
@@ -72,6 +96,7 @@ const Fret = ({ notes, open, number }: FretProps) => {
               note={note}
               selectionStatus={checkSelected(note)}
               onClick={() => setSelectedNote(note.formatted)}
+              visible={!note.sharp && !selectedOnly}
             ></Note>
           </Flex>
         </Flex>
@@ -82,11 +107,12 @@ const Fret = ({ notes, open, number }: FretProps) => {
 
 type NoteProps = {
   selectionStatus: SelectionStatus;
+  visible: boolean;
   onClick: () => void;
   note: Note;
 };
 
-const Note = ({ selectionStatus, onClick, note }: NoteProps) => {
+const Note = ({ selectionStatus, onClick, note, visible }: NoteProps) => {
   const { selected, tonic } = selectionStatus;
   const tonicColor = useColorModeValue("black", "white");
 
@@ -95,7 +121,7 @@ const Note = ({ selectionStatus, onClick, note }: NoteProps) => {
       onClick={onClick}
       // Styles for selected note
       backgroundColor={
-        selected ? note.color : note.sharp ? undefined : `${note.color}77`
+        selected ? note.color : !visible ? undefined : `${note.color}77`
       }
       border={selected ? "2px" : undefined}
       borderColor={tonic ? tonicColor : note.color}
@@ -107,7 +133,7 @@ const Note = ({ selectionStatus, onClick, note }: NoteProps) => {
       h="full"
       borderRadius="full"
     >
-      {(!note.sharp || selected) && note.name}
+      {(visible || selected) && note.name}
     </Flex>
   );
 };
