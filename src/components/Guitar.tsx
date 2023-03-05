@@ -51,8 +51,8 @@ const Fret = ({ notes, open, number }: FretProps) => {
           w="full"
           pt="100%"
           position="relative"
-          borderTop={!open ? "1px" : undefined}
-          borderTopColor={!open ? "gray.500" : undefined}
+          borderTop="1px"
+          borderTopColor={!open ? "gray.500" : "#00000000"}
           borderRight={stringIndex < tuning.length - 1 ? "1px" : undefined}
           mt="0 !important"
           justifyContent="center"
@@ -63,7 +63,7 @@ const Fret = ({ notes, open, number }: FretProps) => {
             bottom="0"
             id="noteSquare"
             mt="-50%"
-            p="2px"
+            p="4px"
             position="absolute"
             w="full"
             h="full"
