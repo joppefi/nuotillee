@@ -4,7 +4,7 @@ const octaveRegex = /([0-9]+)/g;
 
 const notes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 
-const colors = {
+export const colors = {
   C: "#5db9e2",
   "C#": "gray.400",
   D: "#705ce1",
@@ -17,6 +17,15 @@ const colors = {
   A: "#8ddf5f",
   "A#": "gray.400",
   B: "#5fe09f",
+};
+
+export const getNoteColor = (note: string) => {
+  const parsed = note.match(nameRegex)?.[0] as keyof typeof colors;
+  if (!parsed || !colors[parsed]) {
+    throw new Error(`Couldn't resolve color for ${note}`);
+  }
+
+  return colors[parsed];
 };
 
 export type Note = {

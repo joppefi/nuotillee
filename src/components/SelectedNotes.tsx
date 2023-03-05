@@ -1,7 +1,8 @@
-import { Box, Button } from "@chakra-ui/react";
+import { Box, Button, HStack, Tag, VStack } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useSelections } from "./SelectedContext";
 import { Input } from "@chakra-ui/react";
+import { getNoteColor } from "@/utils/notes";
 
 const SelectedNotes = () => {
   const { selectedNote, setSelectedNote } = useSelections();
@@ -73,13 +74,29 @@ const SelectedNotes = () => {
 
   return (
     <Box>
-      {JSON.stringify(selectedNote)}
-      <Input
-        placeholder="Add notes"
-        value={inputNotes}
-        onChange={handleInputChange}
-      />
-      <Button onClick={setNotes}>Add</Button>
+      <VStack alignItems="flex-start">
+        <HStack>
+          {Array.isArray(selectedNote)
+            ? selectedNote.map((note) => (
+                <Tag
+                  size="md"
+                  key={note}
+                  borderRadius="full"
+                  bgColor={getNoteColor(note)}
+                  color="black"
+                >
+                  {note}
+                </Tag>
+              ))
+            : selectedNote}
+        </HStack>
+        <Input
+          placeholder="Add notes"
+          value={inputNotes}
+          onChange={handleInputChange}
+        />
+        <Button onClick={setNotes}>Select notes</Button>
+      </VStack>
     </Box>
   );
 };
