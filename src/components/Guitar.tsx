@@ -56,13 +56,15 @@ type FretProps = {
   selectedOnly: boolean;
 };
 
-const fretMarks = [1, 3, 5, 7, 9, 12, 15, 17, 19, 21, 24];
+const fretMarks = [3, 5, 7, 9, 12, 15, 17, 19, 21, 24];
 
 const Fret = ({ notes, open, number, selectedOnly }: FretProps) => {
   const { setSelectedNote, checkSelected } = useSelections();
   const markedFret = fretMarks.indexOf(number) > -1;
 
   const fretWidth = 100 / fretCount + 1;
+
+  const backgroundColor = useColorModeValue("blackAlpha.200", "whiteAlpha.100");
 
   return (
     <VStack w={`${fretWidth}%`}>
@@ -74,6 +76,11 @@ const Fret = ({ notes, open, number, selectedOnly }: FretProps) => {
           h="0"
           w="full"
           pt="100%"
+          backgroundColor={
+            stringIndex < tuning.length - 1 && markedFret
+              ? backgroundColor
+              : undefined
+          }
           position="relative"
           borderTop="1px"
           borderTopColor={!open ? "gray.500" : "#00000000"}
