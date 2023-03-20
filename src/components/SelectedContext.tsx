@@ -1,5 +1,11 @@
 import { Note } from "@/utils/notes";
-import React, { createContext, ReactNode, useContext, useState } from "react";
+import React, {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 type ContextType = {
   selectedNote: string | string[] | undefined;
@@ -21,9 +27,21 @@ const SelectedContext = createContext<ContextType>({
 });
 
 export const SelectionProvider = ({ children }: { children: ReactNode }) => {
-  const [selectedNote, setSelectedNote] = useState<
+  const [selectedNote, setSelectedNoteState] = useState<
     string | string[] | undefined
   >(undefined);
+
+  useEffect(() => {
+    const initialValue = localStorage.getItem("nuotillee-selected");
+    if (initialValue) {
+      setSelectedNoteState(JSON.parse(initialValue));
+    }
+  }, []);
+
+  const setSelectedNote = (note: string | string[] | undefined) => {
+    window.localStorage.setItem("nuotillee-selected", JSON.stringify(note));
+    setSelectedNoteState(note);
+  };
 
   const checkSelected = (note: Note): SelectionStatus => {
     if (Array.isArray(selectedNote)) {
