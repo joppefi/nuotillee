@@ -7,8 +7,8 @@ export default function Home() {
   return (
     <VStack mx="20" alignItems="flex-start">
       <Piano />
-      <SelectedNotes />
       <Guitar />
+      <SelectedNotes />
     </VStack>
   );
 }

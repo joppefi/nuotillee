@@ -16,6 +16,7 @@ type ContextType = {
 export type SelectionStatus = {
   selected: boolean;
   tonic?: boolean;
+  degree?: number;
 };
 
 const SelectedContext = createContext<ContextType>({
@@ -52,6 +53,10 @@ export const SelectionProvider = ({ children }: { children: ReactNode }) => {
         tonic:
           selectedNote.indexOf(note.formatted) === 0 ||
           selectedNote.indexOf(note.name) === 0,
+        degree:
+          selectedNote.indexOf(note.name) > -1
+            ? selectedNote.indexOf(note.name) + 1
+            : undefined,
       };
     }
 

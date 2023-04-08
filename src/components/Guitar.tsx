@@ -25,6 +25,7 @@ const frets = strings[0].map((note, index) => {
 
 const Guitar = () => {
   const [selectedOnly, setSelectedOnly] = useBoolean();
+  const [showDegree, setShowDegree] = useBoolean();
 
   return (
     <VStack w="full">
@@ -36,12 +37,17 @@ const Guitar = () => {
             open={index === 0}
             number={index}
             selectedOnly={selectedOnly}
+            showDegree={showDegree}
           />
         ))}
       </HStack>
       <FormControl display="flex" alignItems="center">
         <FormLabel>Show selected notes only</FormLabel>
         <Switch isChecked={selectedOnly} onChange={setSelectedOnly.toggle} />
+      </FormControl>
+      <FormControl display="flex" alignItems="center">
+        <FormLabel>Show scale degrees</FormLabel>
+        <Switch isChecked={showDegree} onChange={setShowDegree.toggle} />
       </FormControl>
     </VStack>
   );
@@ -54,11 +60,12 @@ type FretProps = {
   open: boolean;
   number: number;
   selectedOnly: boolean;
+  showDegree?: boolean;
 };
 
 const fretMarks = [3, 5, 7, 9, 12, 15, 17, 19, 21, 24];
 
-const Fret = ({ notes, open, number, selectedOnly }: FretProps) => {
+const Fret = ({ notes, open, number, selectedOnly, showDegree }: FretProps) => {
   const { setSelectedNote, checkSelected } = useSelections();
   const markedFret = fretMarks.indexOf(number) > -1;
 
@@ -101,6 +108,7 @@ const Fret = ({ notes, open, number, selectedOnly }: FretProps) => {
           >
             <Note
               note={note}
+              showDegree={showDegree}
               selectionStatus={checkSelected(note)}
               onClick={() => setSelectedNote(note.formatted)}
               visible={!note.sharp && !selectedOnly}
@@ -115,12 +123,19 @@ const Fret = ({ notes, open, number, selectedOnly }: FretProps) => {
 type NoteProps = {
   selectionStatus: SelectionStatus;
   visible: boolean;
+  showDegree?: boolean;
   onClick: () => void;
   note: Note;
 };
 
-const Note = ({ selectionStatus, onClick, note, visible }: NoteProps) => {
-  const { selected, tonic } = selectionStatus;
+const Note = ({
+  selectionStatus,
+  onClick,
+  note,
+  visible,
+  showDegree,
+}: NoteProps) => {
+  const { selected, tonic, degree } = selectionStatus;
   const tonicColor = useColorModeValue("black", "white");
 
   return (
@@ -140,7 +155,7 @@ const Note = ({ selectionStatus, onClick, note, visible }: NoteProps) => {
       h="full"
       borderRadius="full"
     >
-      {(visible || selected) && note.name}
+      {(visible || selected) && (showDegree ? degree : note.name)}
     </Flex>
   );
 };
