@@ -1,3 +1,5 @@
+import { colors } from "./colors";
+
 const nameRegex = /([A-G])(#|s|b)?/g;
 const modifierRegex = /(#|s|b)/g;
 const octaveRegex = /([0-9]+)/g;
@@ -16,21 +18,6 @@ export const notes = [
   "A#",
   "B",
 ];
-
-export const colors = {
-  C: "#5db9e2",
-  "C#": "gray.400",
-  D: "#705ce1",
-  "D#": "gray.400",
-  E: "#dd5fdd",
-  F: "#e0655e",
-  "F#": "gray.400",
-  G: "#e0c95f",
-  "G#": "gray.400",
-  A: "#8ddf5f",
-  "A#": "gray.400",
-  B: "#5fe09f",
-};
 
 export const getNoteColor = (note: string) => {
   const parsed = note.match(nameRegex)?.[0] as keyof typeof colors;
