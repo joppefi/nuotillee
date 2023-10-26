@@ -2,7 +2,20 @@ const nameRegex = /([A-G])(#|s|b)?/g;
 const modifierRegex = /(#|s|b)/g;
 const octaveRegex = /([0-9]+)/g;
 
-const notes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+export const notes = [
+  "C",
+  "C#",
+  "D",
+  "D#",
+  "E",
+  "F",
+  "F#",
+  "G",
+  "G#",
+  "A",
+  "A#",
+  "B",
+];
 
 export const colors = {
   C: "#5db9e2",
