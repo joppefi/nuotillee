@@ -17,7 +17,7 @@ const scales = [
 
 const ScaleSelector = () => {
   const [root, setRoot] = useState<string>();
-  const [scale, setIntervals] = useState<number>();
+  const [scale, setIntervals] = useState<string>();
 
   const { setSelectedNote } = useSelections();
 
@@ -25,7 +25,7 @@ const ScaleSelector = () => {
     if (scale && root) {
       const note = parseNote(`${root}1`);
 
-      const { intervals } = scales[scale];
+      const { intervals } = scales[parseInt(scale)];
 
       const notes = generateScale(note, intervals);
 
