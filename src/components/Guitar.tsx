@@ -24,7 +24,7 @@ const frets = strings[0].map((note, index) => {
 });
 
 const Guitar = () => {
-  const [selectedOnly, setSelectedOnly] = useBoolean();
+  const [selectedOnly, setSelectedOnly] = useBoolean(true);
   const [showDegree, setShowDegree] = useBoolean();
 
   return (
