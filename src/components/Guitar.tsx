@@ -5,6 +5,8 @@ import {
   FormLabel,
   HStack,
   Switch,
+  Text,
+  Tooltip,
   useBoolean,
   useColorModeValue,
   VStack,
@@ -28,7 +30,7 @@ const Guitar = () => {
   const [showDegree, setShowDegree] = useBoolean();
 
   return (
-    <VStack w="full">
+    <VStack w="full" id="guitar">
       <HStack spacing={0} mt="10" w="full" alignItems="flex-end">
         {frets.map((notes, index) => (
           <Fret
@@ -75,7 +77,6 @@ const Fret = ({ notes, open, number, selectedOnly, showDegree }: FretProps) => {
 
   return (
     <VStack w={`${fretWidth}%`}>
-      {markedFret && <Flex>{number}</Flex>}
       {notes.map((note, stringIndex) => (
         <Flex
           id="noteContainer"
@@ -116,6 +117,20 @@ const Fret = ({ notes, open, number, selectedOnly, showDegree }: FretProps) => {
           </Flex>
         </Flex>
       ))}
+      <Flex h="0" w="full" pt="100%" position="relative">
+        <Flex
+          top="0"
+          bottom="0"
+          id="noteSquare"
+          mt="-50%"
+          position="absolute"
+          w="full"
+          h="full"
+          justifyContent="center"
+        >
+          <Text variant="fret-marks">{markedFret && number}</Text>
+        </Flex>
+      </Flex>
     </VStack>
   );
 };
@@ -139,23 +154,25 @@ const Note = ({
   const tonicColor = useColorModeValue("black", "white");
 
   return (
-    <Flex
-      onClick={onClick}
-      // Styles for selected note
-      backgroundColor={
-        selected ? note.color : !visible ? undefined : `${note.color}77`
-      }
-      border={selected ? "2px" : undefined}
-      borderColor={tonic ? tonicColor : note.color}
-      color="black"
-      // Rest
-      justifyContent="center"
-      alignItems="center"
-      w="full"
-      h="full"
-      borderRadius="full"
-    >
-      {(visible || selected) && (showDegree ? degree : note.name)}
-    </Flex>
+    <Tooltip label={note.formatted} placement="top">
+      <Flex
+        onClick={onClick}
+        // Styles for selected note
+        backgroundColor={
+          selected ? note.color : !visible ? undefined : `${note.color}77`
+        }
+        border={selected ? "2px" : undefined}
+        borderColor={tonic ? tonicColor : note.color}
+        color="black"
+        // Rest
+        justifyContent="center"
+        alignItems="center"
+        w="full"
+        h="full"
+        borderRadius="full"
+      >
+        {(visible || selected) && (showDegree ? degree : note.name)}
+      </Flex>
+    </Tooltip>
   );
 };
