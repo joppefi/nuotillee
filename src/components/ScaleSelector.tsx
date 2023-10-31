@@ -13,6 +13,14 @@ const scales = [
     name: "Minor",
     intervals: [2, 1, 2, 2, 1, 2],
   },
+  {
+    name: "Major pentatonic",
+    intervals: [2, 2, 3, 2],
+  },
+  {
+    name: "Minor pentatonic",
+    intervals: [3, 2, 2, 3],
+  },
 ];
 
 const ScaleSelector = () => {
