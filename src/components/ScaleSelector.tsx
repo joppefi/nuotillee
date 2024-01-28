@@ -3,18 +3,18 @@ import { parseNote, notes } from "@/utils/notes";
 import { generateScale } from "@/utils/scales";
 import { Box, Button, HStack, Select, VStack } from "@chakra-ui/react";
 import { useSelections } from "./SelectedContext";
-import Notation from "./Notation";
+import Staves from "./Staves";
 
 const scales = [
   {
     name: "Major",
     intervals: [2, 2, 1, 2, 2, 2],
-    notationSuffix: "maj",
+    suffix: "maj",
   },
   {
     name: "Minor",
     intervals: [2, 1, 2, 2, 1, 2],
-    notationSuffix: "min",
+    suffix: "min",
   },
   {
     name: "Major pentatonic",
@@ -79,8 +79,11 @@ const ScaleSelector = () => {
           </Button>
         </Box>
         <Box>
-          {root && scale && selectedNote && (
-            <Notation scale={{ root, scale: scales[parseInt(scale)] }} />
+          {root && scale && selectedNote && Array.isArray(selectedNote) && (
+            <Staves
+              scale={{ root, suffix: scales[parseInt(scale)].suffix }}
+              notes={selectedNote}
+            />
           )}
         </Box>
       </HStack>

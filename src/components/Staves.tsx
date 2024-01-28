@@ -3,30 +3,24 @@ import React from "react";
 import { Box } from "@chakra-ui/react";
 import abcjs from "abcjs";
 
-import { useSelections } from "./SelectedContext";
-
 import { sort } from "@/utils/notes";
 
 type ScaleProps = {
   scale: {
     root: string;
-    scale: {
-      notationSuffix: string;
-    };
+    suffix?: string;
   };
+  notes: string[];
 };
 
-const Notation = ({ scale }: ScaleProps) => {
-  const { selectedNote } = useSelections();
-
+const Staves = ({ scale, notes: selectedNote }: ScaleProps) => {
   React.useEffect(() => {
     const renderNotation = () => {
-      console.log("rendering notation", selectedNote);
       if (Array.isArray(selectedNote)) {
         const noteNames = sort(selectedNote).join(" ");
 
         const notation = [
-          `K:${scale.root}${scale.scale.notationSuffix}`,
+          `K:${scale.root}${scale.suffix}`,
           `C D E F G A B`,
           `w:${noteNames}`,
           `c d e f g a b`,
@@ -51,4 +45,4 @@ const Notation = ({ scale }: ScaleProps) => {
   );
 };
 
-export default Notation;
+export default Staves;
