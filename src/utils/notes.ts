@@ -140,13 +140,10 @@ export const shift = (note: Note, interval: number): Note => {
 };
 
 export const sort = (notes: string[], startNote = "C") => {
-  // Do normal sort for the array
   const sorted = notes.sort();
 
-  // Split the array into two
-  const splitIndex = sorted.indexOf(startNote);
-  const firstHalf = sorted.slice(splitIndex);
-  const secondHalf = sorted.slice(0, splitIndex);
+  const firstHalf = sorted.filter((note) => note >= startNote);
+  const secondHalf = sorted.filter((note) => note < startNote);
 
   return [...firstHalf, ...secondHalf];
 };
