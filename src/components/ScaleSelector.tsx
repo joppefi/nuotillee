@@ -29,6 +29,7 @@ const scales = [
 const ScaleSelector = () => {
   const [root, setRoot] = useState<string>();
   const [scale, setIntervals] = useState<string>();
+  const [showStaves, setShowStaves] = useState<boolean>(false);
 
   const { selectedNote, setSelectedNote } = useSelections();
 
@@ -43,51 +44,54 @@ const ScaleSelector = () => {
       const notesNames = notes.map((note) => note.name);
 
       setSelectedNote(notesNames);
+      setShowStaves(true);
     }
   };
 
   return (
-    <VStack
+    <HStack
+      alignItems="flex-start"
       border="2px"
       borderColor="gray.500"
       borderRadius="10"
       p="5"
-      alignItems="flex-start"
     >
-      <HStack>
-        <Box>
-          <Select
-            placeholder="Root note"
-            onChange={({ target }) => setRoot(target.value)}
-          >
-            {notes.map((note) => (
-              <option key={note}>{note}</option>
-            ))}
-          </Select>
-          <Select
-            placeholder="Scale"
-            onChange={({ target }) => setIntervals(target.value)}
-          >
-            {scales.map((scale, index) => (
-              <option key={scale.name} value={index}>
-                {scale.name}
-              </option>
-            ))}
-          </Select>
-          <Button isDisabled={!root || !scale} onClick={getScale}>
-            Select scale notes
-          </Button>
-        </Box>
-        <Box>
-          {root && scale && selectedNote && Array.isArray(selectedNote) && (
+      <Box>
+        <Select
+          placeholder="Root note"
+          onChange={({ target }) => setRoot(target.value)}
+        >
+          {notes.map((note) => (
+            <option key={note}>{note}</option>
+          ))}
+        </Select>
+        <Select
+          placeholder="Scale"
+          onChange={({ target }) => setIntervals(target.value)}
+        >
+          {scales.map((scale, index) => (
+            <option key={scale.name} value={index}>
+              {scale.name}
+            </option>
+          ))}
+        </Select>
+        <Button isDisabled={!root || !scale} onClick={getScale}>
+          Select scale notes
+        </Button>
+      </Box>
+      <Box>
+        {root &&
+          scale &&
+          selectedNote &&
+          Array.isArray(selectedNote) &&
+          showStaves && (
             <Staves
               scale={{ root, suffix: scales[parseInt(scale)].suffix }}
               notes={selectedNote}
             />
           )}
-        </Box>
-      </HStack>
-    </VStack>
+      </Box>
+    </HStack>
   );
 };
 
