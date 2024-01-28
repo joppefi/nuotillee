@@ -1,17 +1,20 @@
 import React, { useState } from "react";
 import { parseNote, notes } from "@/utils/notes";
 import { generateScale } from "@/utils/scales";
-import { Button, Select, VStack } from "@chakra-ui/react";
+import { Box, Button, HStack, Select, VStack } from "@chakra-ui/react";
 import { useSelections } from "./SelectedContext";
+import Notation from "./Notation";
 
 const scales = [
   {
     name: "Major",
     intervals: [2, 2, 1, 2, 2, 2],
+    notationSuffix: "maj",
   },
   {
     name: "Minor",
     intervals: [2, 1, 2, 2, 1, 2],
+    notationSuffix: "min",
   },
   {
     name: "Major pentatonic",
@@ -27,7 +30,7 @@ const ScaleSelector = () => {
   const [root, setRoot] = useState<string>();
   const [scale, setIntervals] = useState<string>();
 
-  const { setSelectedNote } = useSelections();
+  const { selectedNote, setSelectedNote } = useSelections();
 
   const getScale = () => {
     if (scale && root) {
@@ -51,27 +54,36 @@ const ScaleSelector = () => {
       p="5"
       alignItems="flex-start"
     >
-      <Select
-        placeholder="Root note"
-        onChange={({ target }) => setRoot(target.value)}
-      >
-        {notes.map((note) => (
-          <option key={note}>{note}</option>
-        ))}
-      </Select>
-      <Select
-        placeholder="Scale"
-        onChange={({ target }) => setIntervals(target.value)}
-      >
-        {scales.map((scale, index) => (
-          <option key={scale.name} value={index}>
-            {scale.name}
-          </option>
-        ))}
-      </Select>
-      <Button isDisabled={!root || !scale} onClick={getScale}>
-        Select scale notes
-      </Button>
+      <HStack>
+        <Box>
+          <Select
+            placeholder="Root note"
+            onChange={({ target }) => setRoot(target.value)}
+          >
+            {notes.map((note) => (
+              <option key={note}>{note}</option>
+            ))}
+          </Select>
+          <Select
+            placeholder="Scale"
+            onChange={({ target }) => setIntervals(target.value)}
+          >
+            {scales.map((scale, index) => (
+              <option key={scale.name} value={index}>
+                {scale.name}
+              </option>
+            ))}
+          </Select>
+          <Button isDisabled={!root || !scale} onClick={getScale}>
+            Select scale notes
+          </Button>
+        </Box>
+        <Box>
+          {root && scale && selectedNote && (
+            <Notation scale={{ root, scale: scales[parseInt(scale)] }} />
+          )}
+        </Box>
+      </HStack>
     </VStack>
   );
 };

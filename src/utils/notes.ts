@@ -138,3 +138,15 @@ export const shift = (note: Note, interval: number): Note => {
     color: colors[newNote],
   };
 };
+
+export const sort = (notes: string[], startNote = "C") => {
+  // Do normal sort for the array
+  const sorted = notes.sort();
+
+  // Split the array into two
+  const splitIndex = sorted.indexOf(startNote);
+  const firstHalf = sorted.slice(splitIndex);
+  const secondHalf = sorted.slice(0, splitIndex);
+
+  return [...firstHalf, ...secondHalf];
+};
