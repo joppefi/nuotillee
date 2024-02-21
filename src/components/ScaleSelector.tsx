@@ -1,17 +1,20 @@
 import React, { useState } from "react";
 import { parseNote, notes } from "@/utils/notes";
 import { generateScale } from "@/utils/scales";
-import { Button, Select, VStack } from "@chakra-ui/react";
+import { Box, Button, HStack, Select, VStack } from "@chakra-ui/react";
 import { useSelections } from "./SelectedContext";
+import Staves from "./Staves";
 
 const scales = [
   {
     name: "Major",
     intervals: [2, 2, 1, 2, 2, 2],
+    suffix: "maj",
   },
   {
     name: "Minor",
     intervals: [2, 1, 2, 2, 1, 2],
+    suffix: "min",
   },
   {
     name: "Major pentatonic",
@@ -26,8 +29,9 @@ const scales = [
 const ScaleSelector = () => {
   const [root, setRoot] = useState<string>();
   const [scale, setIntervals] = useState<string>();
+  const [showStaves, setShowStaves] = useState<boolean>(false);
 
-  const { setSelectedNote } = useSelections();
+  const { selectedNote, setSelectedNote } = useSelections();
 
   const getScale = () => {
     if (scale && root) {
@@ -40,39 +44,54 @@ const ScaleSelector = () => {
       const notesNames = notes.map((note) => note.name);
 
       setSelectedNote(notesNames);
+      setShowStaves(true);
     }
   };
 
   return (
-    <VStack
+    <HStack
+      alignItems="flex-start"
       border="2px"
       borderColor="gray.500"
       borderRadius="10"
       p="5"
-      alignItems="flex-start"
     >
-      <Select
-        placeholder="Root note"
-        onChange={({ target }) => setRoot(target.value)}
-      >
-        {notes.map((note) => (
-          <option key={note}>{note}</option>
-        ))}
-      </Select>
-      <Select
-        placeholder="Scale"
-        onChange={({ target }) => setIntervals(target.value)}
-      >
-        {scales.map((scale, index) => (
-          <option key={scale.name} value={index}>
-            {scale.name}
-          </option>
-        ))}
-      </Select>
-      <Button isDisabled={!root || !scale} onClick={getScale}>
-        Select scale notes
-      </Button>
-    </VStack>
+      <Box>
+        <Select
+          placeholder="Root note"
+          onChange={({ target }) => setRoot(target.value)}
+        >
+          {notes.map((note) => (
+            <option key={note}>{note}</option>
+          ))}
+        </Select>
+        <Select
+          placeholder="Scale"
+          onChange={({ target }) => setIntervals(target.value)}
+        >
+          {scales.map((scale, index) => (
+            <option key={scale.name} value={index}>
+              {scale.name}
+            </option>
+          ))}
+        </Select>
+        <Button isDisabled={!root || !scale} onClick={getScale}>
+          Select scale notes
+        </Button>
+      </Box>
+      <Box>
+        {root &&
+          scale &&
+          selectedNote &&
+          Array.isArray(selectedNote) &&
+          showStaves && (
+            <Staves
+              scale={{ root, suffix: scales[parseInt(scale)].suffix }}
+              notes={selectedNote}
+            />
+          )}
+      </Box>
+    </HStack>
   );
 };
 

@@ -138,3 +138,12 @@ export const shift = (note: Note, interval: number): Note => {
     color: colors[newNote],
   };
 };
+
+export const sort = (notes: string[], startNote = "C") => {
+  const sorted = notes.sort();
+
+  const firstHalf = sorted.filter((note) => note >= startNote);
+  const secondHalf = sorted.filter((note) => note < startNote);
+
+  return [...firstHalf, ...secondHalf];
+};

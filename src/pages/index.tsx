@@ -9,7 +9,7 @@ export default function Home() {
     <VStack mx="20" alignItems="flex-start">
       <Piano />
       <Guitar />
-      <HStack>
+      <HStack alignItems="flex-start">
         <SelectedNotes />
         <ScaleSelector />
       </HStack>
