@@ -48,7 +48,7 @@ const Guitar = () => {
 
   return (
     <VStack w="full" id="guitar">
-      <HStack spacing={0} mt="10" w="full" alignItems="flex-end">
+      <HStack spacing={0} mt="10" w="full" alignItems="flex-end" padding="2">
         {frets.map((notes, index) => (
           <Fret
             key={index}
