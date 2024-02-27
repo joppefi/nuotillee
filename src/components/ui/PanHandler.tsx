@@ -1,6 +1,8 @@
-import { Box } from "@chakra-ui/react";
 import React, { useState } from "react";
+
+import { Box } from "@chakra-ui/react";
 import { formatPosition } from "./utils";
+
 import Window from "./Window";
 
 type Position = {
@@ -11,6 +13,9 @@ type Position = {
 type CursorPos = Position & {
   window?: number;
 };
+
+const WIDTH = 6000;
+const HEIGHT = 3000;
 
 const PanHandler = ({ children }: { children: React.ReactNode[] }) => {
   const initialPosition = { x: -1500, y: 0 };
@@ -71,8 +76,10 @@ const PanHandler = ({ children }: { children: React.ReactNode[] }) => {
 
   const handleScale = (evt: React.WheelEvent) => {
     const delta = evt.deltaY;
-    if (scale > 0) {
-      setScale((prev) => prev - delta / 1000);
+    const newScale = scale + delta / 1000;
+
+    if (newScale > 0.1) {
+      setScale(newScale);
     }
   };
 
@@ -80,13 +87,6 @@ const PanHandler = ({ children }: { children: React.ReactNode[] }) => {
     { nativeEvent }: React.MouseEvent,
     index: number
   ) => {
-    console.log(
-      "window start",
-      nativeEvent.clientX,
-      nativeEvent.clientY,
-      index
-    );
-
     setDragElementStartPos(childrenPositions[index]);
     setDragCursorStartPos({
       x: nativeEvent.clientX,
@@ -96,31 +96,39 @@ const PanHandler = ({ children }: { children: React.ReactNode[] }) => {
   };
 
   return (
-    <Box
-      backgroundColor="whiteAlpha.800"
-      w="full"
-      h="full"
-      p="2"
-      id="panhandler"
-      style={{ scale: `${scale}` }}
-      transform={formatPosition(renderPosition)}
-      onMouseDown={handleMouseDown}
-      onMouseUp={handleMouseUp}
-      onMouseMove={handleMouseMove}
-      onWheel={handleScale}
-      onMouseLeave={handleMouseUp}
-    >
-      {children?.map((child: React.ReactNode, index: number) => (
-        <Window
-          key={`window${index}`}
-          index={index}
-          position={childrenPositions[index]}
-          onMoveStart={handleWindowMove}
-          onMoveEnd={handleMouseUp}
+    <Box flex="1" w="full" h="full">
+      <Box
+        style={{ scale: `${scale}` }}
+        transformOrigin="50% 50%"
+        w="full"
+        h="full"
+      >
+        <Box
+          backgroundColor="whiteAlpha.800"
+          w={`${WIDTH}px`}
+          h={`${HEIGHT}px`}
+          p="2"
+          id="panhandler"
+          transform={formatPosition(renderPosition)}
+          onMouseDown={handleMouseDown}
+          onMouseUp={handleMouseUp}
+          onMouseMove={handleMouseMove}
+          onWheel={handleScale}
+          onMouseLeave={handleMouseUp}
         >
-          {child}
-        </Window>
-      ))}
+          {children?.map((child: React.ReactNode, index: number) => (
+            <Window
+              key={`window${index}`}
+              index={index}
+              position={childrenPositions[index]}
+              onMoveStart={handleWindowMove}
+              onMoveEnd={handleMouseUp}
+            >
+              {child}
+            </Window>
+          ))}
+        </Box>
+      </Box>
     </Box>
   );
 };
