@@ -7,21 +7,19 @@ import TopBar from "@/components/ui/TopBar";
 
 const WindowedUi = () => {
   return (
-    <VStack h="100dvh">
+    <VStack h="100dvh" spacing={0}>
       <TopBar />
       <Box flex="1" backgroundColor="gray.100" w="100%" overflow="hidden">
-        <Box w="6000px" h="3000px">
-          <PanHandler>
-            <Box w="8xl">
-              <Piano />
-            </Box>
+        <PanHandler>
+          <Box w="8xl">
+            <Piano />
+          </Box>
 
-            <Box w="8xl">
-              <Guitar />
-            </Box>
-            <ScaleSelector />
-          </PanHandler>
-        </Box>
+          <Box w="8xl">
+            <Guitar />
+          </Box>
+          <ScaleSelector />
+        </PanHandler>
       </Box>
     </VStack>
   );
