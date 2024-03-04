@@ -20,13 +20,16 @@ const HEIGHT = 3000;
 const PanHandler = ({ children }: { children: React.ReactNode[] }) => {
   const initialPosition = { x: -1500, y: 0 };
 
-  const [scale, setScale] = useState(1);
-  const [childrenPositions, setChildrenPositions] = useState<Position[]>(
+  const [viewScale, setViewScale] = useState(1);
+  const [viewPosition, setViewPosition] = useState(initialPosition);
+
+  const [windowPositions, setWindowPositions] = useState<Position[]>(
     children.map(() => initialPosition)
   );
 
-  const [renderPosition, setRenderPosition] = useState(initialPosition);
-
+  /**
+   * States for handling drag
+   */
   const [dragElementStartPos, setDragElementStartPos] = useState<
     Position | undefined
   >(initialPosition);
@@ -34,11 +37,15 @@ const PanHandler = ({ children }: { children: React.ReactNode[] }) => {
     CursorPos | undefined
   >(undefined);
 
+  /**
+   * Mouse event listeners
+   */
+
   const handleMouseDown = ({ nativeEvent }: React.MouseEvent) => {
     const { id } = nativeEvent.target as HTMLElement;
 
     if (id === "panhandler") {
-      setDragElementStartPos(renderPosition);
+      setDragElementStartPos(viewPosition);
       setDragCursorStartPos({
         x: nativeEvent.clientX,
         y: nativeEvent.clientY,
@@ -53,11 +60,11 @@ const PanHandler = ({ children }: { children: React.ReactNode[] }) => {
 
   const handleMouseMove = ({ nativeEvent }: React.MouseEvent) => {
     if (dragCursorStartPos && dragElementStartPos) {
-      const dx = (nativeEvent.clientX - dragCursorStartPos.x) / scale;
-      const dy = (nativeEvent.clientY - dragCursorStartPos.y) / scale;
+      const dx = (nativeEvent.clientX - dragCursorStartPos.x) / viewScale;
+      const dy = (nativeEvent.clientY - dragCursorStartPos.y) / viewScale;
 
       if (dragCursorStartPos.window !== undefined) {
-        setChildrenPositions((prev) => {
+        setWindowPositions((prev) => {
           const newPositions = [...prev];
           newPositions[dragCursorStartPos.window as number] = {
             x: dragElementStartPos.x - dx,
@@ -66,7 +73,7 @@ const PanHandler = ({ children }: { children: React.ReactNode[] }) => {
           return newPositions;
         });
       } else {
-        setRenderPosition({
+        setViewPosition({
           x: dragElementStartPos.x + dx,
           y: dragElementStartPos.y + dy,
         });
@@ -76,10 +83,10 @@ const PanHandler = ({ children }: { children: React.ReactNode[] }) => {
 
   const handleScale = (evt: React.WheelEvent) => {
     const delta = evt.deltaY;
-    const newScale = scale + delta / 1000;
+    const newScale = viewScale + delta / 1000;
 
     if (newScale > 0.1) {
-      setScale(newScale);
+      setViewScale(newScale);
     }
   };
 
@@ -87,7 +94,7 @@ const PanHandler = ({ children }: { children: React.ReactNode[] }) => {
     { nativeEvent }: React.MouseEvent,
     index: number
   ) => {
-    setDragElementStartPos(childrenPositions[index]);
+    setDragElementStartPos(windowPositions[index]);
     setDragCursorStartPos({
       x: nativeEvent.clientX,
       y: nativeEvent.clientY,
@@ -98,7 +105,7 @@ const PanHandler = ({ children }: { children: React.ReactNode[] }) => {
   return (
     <Box flex="1" w="full" h="full">
       <Box
-        style={{ scale: `${scale}` }}
+        style={{ scale: `${viewScale}` }}
         transformOrigin="50% 50%"
         w="full"
         h="full"
@@ -110,7 +117,7 @@ const PanHandler = ({ children }: { children: React.ReactNode[] }) => {
           h={`${HEIGHT}px`}
           p="2"
           id="panhandler"
-          transform={formatPosition(renderPosition)}
+          transform={formatPosition(viewPosition)}
           onMouseDown={handleMouseDown}
           onMouseUp={handleMouseUp}
           onMouseMove={handleMouseMove}
@@ -121,7 +128,7 @@ const PanHandler = ({ children }: { children: React.ReactNode[] }) => {
             <Window
               key={`window${index}`}
               index={index}
-              position={childrenPositions[index]}
+              position={windowPositions[index]}
               onMoveStart={handleWindowMove}
               onMoveEnd={handleMouseUp}
             >
