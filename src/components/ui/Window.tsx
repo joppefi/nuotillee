@@ -1,7 +1,7 @@
 import React from "react";
 import { Box } from "@chakra-ui/react";
 
-import { formatPositionChildren } from "./utils";
+import { formatPosition, formatPositionChildren } from "./utils";
 import { DragHandleIcon } from "@chakra-ui/icons";
 
 type WindowProps = {
@@ -26,7 +26,7 @@ const Window = ({
       borderRadius="10"
       w="8xl"
       position="absolute"
-      transform={formatPositionChildren(position)}
+      transform={formatPosition(position)}
     >
       <Box
         cursor="grab"
