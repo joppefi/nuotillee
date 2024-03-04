@@ -102,6 +102,7 @@ const PanHandler = ({ children }: { children: React.ReactNode[] }) => {
         transformOrigin="50% 50%"
         w="full"
         h="full"
+        userSelect={dragCursorStartPos ? "none" : "auto"}
       >
         <Box
           backgroundColor="whiteAlpha.800"
