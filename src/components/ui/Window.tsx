@@ -29,6 +29,7 @@ const Window = ({
       transform={formatPositionChildren(position)}
     >
       <Box
+        cursor="grab"
         onMouseDown={(evt) => onMoveStart(evt, index)}
         onMouseUp={onMoveEnd}
         id={`windowheader-${index}`}
