@@ -1,43 +1,51 @@
 import React from "react";
-import { Box } from "@chakra-ui/react";
+import { Box, BoxProps, Flex } from "@chakra-ui/react";
 
-import { formatPosition, formatPositionChildren } from "./utils";
-import { DragHandleIcon } from "@chakra-ui/icons";
+import { formatPosition } from "./utils";
+import {
+  CloseIcon,
+  DeleteIcon,
+  DragHandleIcon,
+  SettingsIcon,
+  SmallCloseIcon,
+} from "@chakra-ui/icons";
 
 type WindowProps = {
   position: { x: number; y: number };
+  w?: BoxProps["w"];
   children: React.ReactNode;
-  index: number;
-  onMoveStart: (evt: React.MouseEvent, index: number) => void;
+  onMoveStart: (evt: React.MouseEvent) => void;
   onMoveEnd: () => void;
+  onDelete: () => void;
 };
 
 const Window = ({
   position,
   children,
-  index,
+  w,
   onMoveStart,
   onMoveEnd,
+  onDelete,
 }: WindowProps) => {
   return (
     <Box
       border="2px"
       borderColor="gray.500"
       borderRadius="10"
-      w="8xl"
+      w={w}
       position="absolute"
       transform={formatPosition(position)}
     >
-      <Box
+      <Flex
         cursor="grab"
-        onMouseDown={(evt) => onMoveStart(evt, index)}
+        onMouseDown={(evt) => onMoveStart(evt)}
         onMouseUp={onMoveEnd}
-        id={`windowheader-${index}`}
         w="full"
         p="2"
+        justifyContent={"flex-end"}
       >
-        <DragHandleIcon pointerEvents="none" />
-      </Box>
+        <SmallCloseIcon cursor="pointer" onClick={onDelete} />
+      </Flex>
       {children}
     </Box>
   );
