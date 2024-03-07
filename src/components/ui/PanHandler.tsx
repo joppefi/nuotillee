@@ -243,6 +243,23 @@ const PanHandler = ({ initialConfig }: PanHandlerProps) => {
     saveConfig(newConfig);
   };
 
+  const handleWidthChange = (w: BoxProps["w"], id: string) => {
+    const newConfig = {
+      ...config,
+      windows: config.windows.map((window) => {
+        if (window.id === id) {
+          return {
+            ...window,
+            w,
+          };
+        }
+        return window;
+      }),
+    };
+    setConfig(newConfig);
+    saveConfig(newConfig);
+  };
+
   const saveConfig = (config: Config) => {
     window.localStorage.setItem("nuotillee-config", JSON.stringify(config));
   };
@@ -298,6 +315,7 @@ const PanHandler = ({ initialConfig }: PanHandlerProps) => {
                 onMoveStart={(evt) => handleWindowMoveStart(evt, id)}
                 onMoveEnd={handleMouseUp}
                 onDelete={() => handleDeleteComponent(id)}
+                onWidthChange={(w) => handleWidthChange(w, id)}
               >
                 <Component
                   state={state}

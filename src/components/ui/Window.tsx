@@ -2,13 +2,7 @@ import React from "react";
 import { Box, BoxProps, Flex } from "@chakra-ui/react";
 
 import { formatPosition } from "./utils";
-import {
-  CloseIcon,
-  DeleteIcon,
-  DragHandleIcon,
-  SettingsIcon,
-  SmallCloseIcon,
-} from "@chakra-ui/icons";
+import { SettingsIcon, SmallCloseIcon } from "@chakra-ui/icons";
 
 type WindowProps = {
   position: { x: number; y: number };
@@ -17,7 +11,24 @@ type WindowProps = {
   onMoveStart: (evt: React.MouseEvent) => void;
   onMoveEnd: () => void;
   onDelete: () => void;
+  onWidthChange: (w: BoxProps["w"]) => void;
 };
+
+const sizes = [
+  "auto",
+  "sm",
+  "md",
+  "lg",
+  "xl",
+  "2xl",
+  "3xl",
+  "4xl",
+  "5xl",
+  "6xl",
+  "7xl",
+  "8xl",
+  "9xl",
+];
 
 const Window = ({
   position,
@@ -26,7 +37,14 @@ const Window = ({
   onMoveStart,
   onMoveEnd,
   onDelete,
+  onWidthChange,
 }: WindowProps) => {
+  const toggleSize = () => {
+    const currentIndex = w ? sizes.indexOf(w) : 0;
+    const nextIndex = (currentIndex + 1) % sizes.length;
+    onWidthChange(sizes[nextIndex]);
+  };
+
   return (
     <Box
       border="2px"
@@ -44,6 +62,7 @@ const Window = ({
         p="2"
         justifyContent={"flex-end"}
       >
+        <SettingsIcon cursor="pointer" onClick={toggleSize} />
         <SmallCloseIcon cursor="pointer" onClick={onDelete} />
       </Flex>
       {children}
