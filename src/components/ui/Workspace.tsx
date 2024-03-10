@@ -88,7 +88,7 @@ type PanHandlerProps = {
   initialConfig: Config;
 };
 
-const PanHandler = ({ initialConfig }: PanHandlerProps) => {
+const Workspace = ({ initialConfig }: PanHandlerProps) => {
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
@@ -405,4 +405,4 @@ const PanHandler = ({ initialConfig }: PanHandlerProps) => {
   );
 };
 
-export default PanHandler;
+export default Workspace;

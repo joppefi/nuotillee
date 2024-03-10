@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import PanHandler, { Config } from "@/components/ui/PanHandler";
+import Workspace, { Config } from "@/components/ui/Workspace";
 import { Box, VStack } from "@chakra-ui/react";
 import TopBar from "@/components/ui/TopBar";
 import { v4 as uuidv4 } from "uuid";
@@ -15,6 +15,7 @@ const WindowedUi = () => {
     } else {
       setInitialConfig({
         id: uuidv4(),
+        title: "Untitled",
         width: 8000,
         height: 6000,
         view: {
@@ -70,7 +71,7 @@ const WindowedUi = () => {
         <>
           <TopBar />
           <Box flex="1" backgroundColor="gray.100" w="100%" overflow="hidden">
-            <PanHandler initialConfig={initialConfig} />
+            <Workspace initialConfig={initialConfig} />
           </Box>
         </>
       )}
