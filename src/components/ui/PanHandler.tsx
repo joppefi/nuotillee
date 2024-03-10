@@ -11,6 +11,19 @@ import {
   PopoverContent,
   PopoverTrigger,
   VStack,
+  Drawer,
+  DrawerBody,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton,
+  useDisclosure,
+  FormControl,
+  Editable,
+  EditableInput,
+  EditablePreview,
+  FormLabel,
 } from "@chakra-ui/react";
 
 import { v4 as uuidv4 } from "uuid";
@@ -22,7 +35,7 @@ import Guitar from "../Guitar";
 import TextBox from "../TextBox";
 import YoutubeEmbed from "../YoutubeEmbed";
 import { WindowComponentProps } from "../types";
-import { AddIcon } from "@chakra-ui/icons";
+import { AddIcon, SettingsIcon } from "@chakra-ui/icons";
 
 type Position = {
   x: number;
@@ -49,6 +62,7 @@ type Window<Type extends WindowType, State> = {
 
 export type Config = {
   id: string;
+  title: string;
   width: number;
   height: number;
   view: {
@@ -84,6 +98,8 @@ const PanHandler = ({ initialConfig }: PanHandlerProps) => {
   const initialPosition = { x: -1500, y: 0 };
 
   const [config, setConfig] = useState<Config>(initialConfig);
+
+  const { isOpen, onClose, onOpen } = useDisclosure();
 
   /**
    * States for handling drag
@@ -260,6 +276,16 @@ const PanHandler = ({ initialConfig }: PanHandlerProps) => {
     saveConfig(newConfig);
   };
 
+  const handleTitle = (title: string) => {
+    console.log(title);
+    const newConfig = {
+      ...config,
+      title,
+    };
+    setConfig(newConfig);
+    saveConfig(newConfig);
+  };
+
   const saveConfig = (config: Config) => {
     window.localStorage.setItem("nuotillee-config", JSON.stringify(config));
   };
@@ -329,6 +355,11 @@ const PanHandler = ({ initialConfig }: PanHandlerProps) => {
         </Box>
       </Box>
       <Box id="overlay" position="fixed" bottom={0} right={0} p="2">
+        <IconButton
+          onClick={onOpen}
+          aria-label="Settings"
+          icon={<SettingsIcon />}
+        />
         <Popover>
           <PopoverTrigger>
             <IconButton
@@ -355,6 +386,20 @@ const PanHandler = ({ initialConfig }: PanHandlerProps) => {
             </PopoverBody>
           </PopoverContent>
         </Popover>
+        <Drawer placement="right" onClose={onClose} isOpen={isOpen}>
+          <DrawerOverlay />
+          <DrawerContent>
+            <DrawerBody>
+              <FormControl>
+                <FormLabel>Title</FormLabel>
+                <Editable value={config.title} onChange={handleTitle}>
+                  <EditablePreview />
+                  <EditableInput />
+                </Editable>
+              </FormControl>
+            </DrawerBody>
+          </DrawerContent>
+        </Drawer>
       </Box>
     </Box>
   );
