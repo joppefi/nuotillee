@@ -2,7 +2,11 @@ import React from "react";
 import { Box, BoxProps, Flex } from "@chakra-ui/react";
 
 import { formatPosition } from "./utils";
-import { SettingsIcon, SmallCloseIcon } from "@chakra-ui/icons";
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  SmallCloseIcon,
+} from "@chakra-ui/icons";
 
 type WindowProps = {
   position: { x: number; y: number };
@@ -39,9 +43,9 @@ const Window = ({
   onDelete,
   onWidthChange,
 }: WindowProps) => {
-  const toggleSize = () => {
-    const currentIndex = w ? sizes.indexOf(w) : 0;
-    const nextIndex = (currentIndex + 1) % sizes.length;
+  const handleWidthChange = (addValue: number) => {
+    const currentIndex = w ? sizes.indexOf(w as string) : 0;
+    const nextIndex = (currentIndex + addValue) % sizes.length;
     onWidthChange(sizes[nextIndex]);
   };
 
@@ -60,9 +64,18 @@ const Window = ({
         onMouseUp={onMoveEnd}
         w="full"
         p="2"
-        justifyContent={"flex-end"}
+        justifyContent={"space-between"}
       >
-        <SettingsIcon cursor="pointer" onClick={toggleSize} />
+        <Box>
+          <ChevronLeftIcon
+            cursor="pointer"
+            onClick={() => handleWidthChange(-1)}
+          />
+          <ChevronRightIcon
+            cursor="pointer"
+            onClick={() => handleWidthChange(1)}
+          />
+        </Box>
         <SmallCloseIcon cursor="pointer" onClick={onDelete} />
       </Flex>
       {children}
