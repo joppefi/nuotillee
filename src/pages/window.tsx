@@ -34,9 +34,7 @@ const WindowedUi = () => {
             },
             w: "8xl",
             type: "guitar",
-            state: {
-              note: "E4",
-            },
+            state: {},
           },
           {
             id: uuidv4(),
