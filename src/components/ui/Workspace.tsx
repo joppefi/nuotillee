@@ -36,6 +36,7 @@ import TextBox from "../TextBox";
 import YoutubeEmbed from "../YoutubeEmbed";
 import { WindowComponentProps } from "../types";
 import { AddIcon, SettingsIcon } from "@chakra-ui/icons";
+import ChordStack, { ChordState } from "../ChordStack";
 
 type Position = {
   x: number;
@@ -46,7 +47,14 @@ type CursorPos = Position & {
   window?: string;
 };
 
-const windowTypes = ["guitar", "debug", "piano", "text", "youtube"] as const;
+const windowTypes = [
+  "guitar",
+  "debug",
+  "piano",
+  "text",
+  "youtube",
+  "chords",
+] as const;
 type WindowType = (typeof windowTypes)[number];
 
 type Window<Type extends WindowType, State> = {
@@ -78,6 +86,7 @@ export type Config = {
     | Window<"piano", {}>
     | Window<"text", { content: string }>
     | Window<"youtube", { url: string }>
+    | Window<"chords", ChordState>
   >;
 };
 
@@ -331,6 +340,9 @@ const Workspace = ({ initialConfig }: PanHandlerProps) => {
                 break;
               case "youtube":
                 Component = YoutubeEmbed;
+                break;
+              case "chords":
+                Component = ChordStack;
                 break;
             }
             return (

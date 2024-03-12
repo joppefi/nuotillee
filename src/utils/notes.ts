@@ -17,7 +17,9 @@ export const notes = [
   "A",
   "A#",
   "B",
-];
+] as const;
+
+export type NoteName = (typeof notes)[number];
 
 export const getNoteColor = (note: string) => {
   const parsed = note.match(nameRegex)?.[0] as keyof typeof colors;
@@ -29,19 +31,7 @@ export const getNoteColor = (note: string) => {
 };
 
 export type Note = {
-  name:
-    | "C"
-    | "C#"
-    | "D"
-    | "D#"
-    | "E"
-    | "F"
-    | "F#"
-    | "G"
-    | "G#"
-    | "A"
-    | "A#"
-    | "B";
+  name: NoteName;
   octave: number;
   formatted: string;
   color: string;
