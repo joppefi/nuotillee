@@ -5,10 +5,13 @@ import { formatPosition } from "./utils";
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
+  LockIcon,
   SmallCloseIcon,
+  UnlockIcon,
 } from "@chakra-ui/icons";
 
 type WindowProps = {
+  locked?: boolean;
   position: { x: number; y: number };
   w?: BoxProps["w"];
   children: React.ReactNode;
@@ -16,6 +19,7 @@ type WindowProps = {
   onMoveEnd: () => void;
   onDelete: () => void;
   onWidthChange: (w: BoxProps["w"]) => void;
+  onLocked: () => void;
 };
 
 const sizes = [
@@ -35,6 +39,7 @@ const sizes = [
 ];
 
 const Window = ({
+  locked,
   position,
   children,
   w,
@@ -42,6 +47,7 @@ const Window = ({
   onMoveEnd,
   onDelete,
   onWidthChange,
+  onLocked,
 }: WindowProps) => {
   const handleWidthChange = (addValue: number) => {
     const currentIndex = w ? sizes.indexOf(w as string) : 0;
@@ -77,10 +83,15 @@ const Window = ({
             cursor="pointer"
             onClick={() => handleWidthChange(1)}
           />
+          {locked ? (
+            <LockIcon onClick={onLocked} cursor="pointer" />
+          ) : (
+            <UnlockIcon onClick={onLocked} cursor="pointer" />
+          )}
         </Box>
         <SmallCloseIcon cursor="pointer" onClick={onDelete} />
       </Flex>
-      {children}
+      <Box pointerEvents={locked ? "none" : undefined}>{children}</Box>
     </Box>
   );
 };

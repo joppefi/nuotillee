@@ -288,6 +288,23 @@ const Workspace = ({ initialConfig, onExit }: PanHandlerProps) => {
     saveConfig(newConfig);
   };
 
+  const handleWindowLock = (id: string) => {
+    const newConfig = {
+      ...config,
+      windows: config.windows.map((window) => {
+        if (window.id === id) {
+          return {
+            ...window,
+            locked: !window.locked,
+          };
+        }
+        return window;
+      }),
+    };
+    setConfig(newConfig);
+    saveConfig(newConfig);
+  };
+
   const handleTitle = (title: string) => {
     console.log(title);
     const newConfig = {
@@ -303,7 +320,7 @@ const Workspace = ({ initialConfig, onExit }: PanHandlerProps) => {
   };
 
   const handleApiSave = async () => {
-    const data = trigger(config);
+    const data = await trigger(config);
 
     console.log(data);
   };
@@ -334,7 +351,7 @@ const Workspace = ({ initialConfig, onExit }: PanHandlerProps) => {
           onWheel={handleScale}
           onMouseLeave={handleMouseUp}
         >
-          {config.windows.map(({ id, type, state, w }, index) => {
+          {config.windows.map(({ id, type, state, w, locked }, index) => {
             let Component = (props: WindowComponentProps<any>) => <></>;
             switch (type) {
               case "guitar":
@@ -356,6 +373,7 @@ const Workspace = ({ initialConfig, onExit }: PanHandlerProps) => {
             }
             return (
               <Window
+                locked={locked}
                 key={id}
                 w={w}
                 position={config.windows[index].position}
@@ -363,6 +381,7 @@ const Workspace = ({ initialConfig, onExit }: PanHandlerProps) => {
                 onMoveEnd={handleMouseUp}
                 onDelete={() => handleDeleteComponent(id)}
                 onWidthChange={(w) => handleWidthChange(w, id)}
+                onLocked={() => handleWindowLock(id)}
               >
                 <Component
                   state={state}
