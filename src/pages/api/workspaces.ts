@@ -38,10 +38,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           error.status = 401;
           throw error;
         }
+
         // Post will work as upsert
-        const { id, height, width, title, view, windows } = JSON.parse(
-          body
-        ) as Config;
+        const { id, height, width, title, view, windows } = body as Config;
 
         if (!id) {
           res.status(400).end();
