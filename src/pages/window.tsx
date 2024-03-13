@@ -1,79 +1,85 @@
-import { useEffect, useState } from "react";
-import Workspace, { Config } from "@/components/ui/Workspace";
+import { useState } from "react";
 import { Box, VStack } from "@chakra-ui/react";
-import TopBar from "@/components/ui/TopBar";
 import { v4 as uuidv4 } from "uuid";
+
+import Workspace, { Config } from "@/components/ui/Workspace";
+import WorkspaceSelector from "@/components/ui/WorkspaceSelector";
+
+import { useWorkspaces } from "@/lib/swr";
 
 const WindowedUi = () => {
   const [initialConfig, setInitialConfig] = useState<Config | undefined>();
 
-  useEffect(() => {
-    const storedConfig = window.localStorage.getItem("nuotillee-config");
+  const { isLoading, data, mutate } = useWorkspaces();
 
-    if (storedConfig) {
-      setInitialConfig(JSON.parse(storedConfig) as Config);
-    } else {
-      setInitialConfig({
-        id: uuidv4(),
-        title: "Untitled",
-        width: 8000,
-        height: 6000,
-        view: {
-          scale: 1,
+  const newWorkspace = () => {
+    setInitialConfig({
+      id: uuidv4(),
+      title: "Untitled",
+      width: 8000,
+      height: 6000,
+      view: {
+        scale: 1,
+        position: {
+          x: -2000,
+          y: -800,
+        },
+      },
+      windows: [
+        {
+          id: uuidv4(),
           position: {
-            x: 0,
-            y: 0,
+            x: 2300,
+            y: 800,
+          },
+          w: "8xl",
+          type: "guitar",
+          state: {},
+        },
+        {
+          id: uuidv4(),
+          position: {
+            x: 2300,
+            y: 800,
+          },
+          type: "youtube",
+          state: {
+            url: "https://www.youtube.com/embed/zrZjVWbtUt4",
           },
         },
-        windows: [
-          {
-            id: uuidv4(),
-            position: {
-              x: 0,
-              y: 0,
-            },
-            w: "8xl",
-            type: "guitar",
-            state: {},
-          },
-          {
-            id: uuidv4(),
-            position: {
-              x: 0,
-              y: 0,
-            },
-            type: "text",
-            state: {
-              content: "asd",
-            },
-          },
-          {
-            id: uuidv4(),
-            position: {
-              x: 0,
-              y: 0,
-            },
-            type: "youtube",
-            state: {
-              url: "https://www.youtube.com/embed/zrZjVWbtUt4",
-            },
-          },
-        ],
-      });
-    }
-  }, []);
+      ],
+    });
+  };
+
+  const handleExit = () => {
+    mutate();
+    setInitialConfig(undefined);
+  };
+
+  if (isLoading) return <div>Loading...</div>;
 
   return (
-    <VStack h="100dvh" spacing={0}>
-      {initialConfig && (
-        <>
-          <TopBar />
-          <Box flex="1" backgroundColor="gray.100" w="100%" overflow="hidden">
-            <Workspace initialConfig={initialConfig} />
+    <>
+      <VStack h="100dvh" spacing={0}>
+        {initialConfig && (
+          <Box
+            key={initialConfig.id}
+            flex="1"
+            backgroundColor="gray.100"
+            w="100%"
+            overflow="hidden"
+          >
+            <Workspace initialConfig={initialConfig} onExit={handleExit} />
           </Box>
-        </>
-      )}
-    </VStack>
+        )}
+      </VStack>
+      <WorkspaceSelector
+        isOpen={!initialConfig}
+        workspaces={data}
+        onSelect={(config) => setInitialConfig(config)}
+        onCreate={newWorkspace}
+      />
+    </>
   );
 };
 

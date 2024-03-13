@@ -13,17 +13,16 @@ import {
   VStack,
   Drawer,
   DrawerBody,
-  DrawerFooter,
-  DrawerHeader,
   DrawerOverlay,
   DrawerContent,
-  DrawerCloseButton,
   useDisclosure,
   FormControl,
   Editable,
   EditableInput,
   EditablePreview,
   FormLabel,
+  HStack,
+  DrawerFooter,
 } from "@chakra-ui/react";
 
 import { v4 as uuidv4 } from "uuid";
@@ -37,6 +36,7 @@ import YoutubeEmbed from "../YoutubeEmbed";
 import { WindowComponentProps } from "../types";
 import { AddIcon, SettingsIcon } from "@chakra-ui/icons";
 import ChordStack, { ChordState } from "../ChordStack";
+import { useWorkspaceMutation } from "@/lib/swr";
 
 type Position = {
   x: number;
@@ -95,9 +95,10 @@ const HEIGHT = 3000;
 
 type PanHandlerProps = {
   initialConfig: Config;
+  onExit: () => void;
 };
 
-const Workspace = ({ initialConfig }: PanHandlerProps) => {
+const Workspace = ({ initialConfig, onExit }: PanHandlerProps) => {
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
@@ -109,6 +110,8 @@ const Workspace = ({ initialConfig }: PanHandlerProps) => {
   const [config, setConfig] = useState<Config>(initialConfig);
 
   const { isOpen, onClose, onOpen } = useDisclosure();
+
+  const { trigger, isMutating } = useWorkspaceMutation();
 
   /**
    * States for handling drag
@@ -299,6 +302,12 @@ const Workspace = ({ initialConfig }: PanHandlerProps) => {
     window.localStorage.setItem("nuotillee-config", JSON.stringify(config));
   };
 
+  const handleApiSave = async () => {
+    const data = trigger(config);
+
+    console.log(data);
+  };
+
   if (!isClient) {
     return null;
   }
@@ -367,37 +376,42 @@ const Workspace = ({ initialConfig }: PanHandlerProps) => {
         </Box>
       </Box>
       <Box id="overlay" position="fixed" bottom={0} right={0} p="2">
-        <IconButton
-          onClick={onOpen}
-          aria-label="Settings"
-          icon={<SettingsIcon />}
-        />
-        <Popover>
-          <PopoverTrigger>
-            <IconButton
-              //onClick={handleCreate}
-              aria-label="Add"
-              icon={<AddIcon />}
-            />
-          </PopoverTrigger>
-          <PopoverContent>
-            <PopoverArrow />
-            <PopoverBody>
-              <VStack>
-                {windowTypes.map((type) => (
-                  <Button
-                    key={type}
-                    w="full"
-                    variant="ghost"
-                    onClick={() => handleCreate(type)}
-                  >
-                    {type}
-                  </Button>
-                ))}
-              </VStack>
-            </PopoverBody>
-          </PopoverContent>
-        </Popover>
+        <HStack>
+          <Popover>
+            <PopoverTrigger>
+              <IconButton
+                //onClick={handleCreate}
+                aria-label="Add"
+                icon={<AddIcon />}
+              />
+            </PopoverTrigger>
+            <PopoverContent>
+              <PopoverArrow />
+              <PopoverBody>
+                <VStack>
+                  {windowTypes.map((type) => (
+                    <Button
+                      key={type}
+                      w="full"
+                      variant="ghost"
+                      onClick={() => handleCreate(type)}
+                    >
+                      {type}
+                    </Button>
+                  ))}
+                </VStack>
+              </PopoverBody>
+            </PopoverContent>
+          </Popover>
+          <Button isLoading={isMutating} onClick={handleApiSave}>
+            Save
+          </Button>
+          <IconButton
+            onClick={onOpen}
+            aria-label="Settings"
+            icon={<SettingsIcon />}
+          />
+        </HStack>
         <Drawer placement="right" onClose={onClose} isOpen={isOpen}>
           <DrawerOverlay />
           <DrawerContent>
@@ -410,6 +424,11 @@ const Workspace = ({ initialConfig }: PanHandlerProps) => {
                 </Editable>
               </FormControl>
             </DrawerBody>
+            <DrawerFooter>
+              <Button variant="ghost" onClick={onExit}>
+                Exit workspace
+              </Button>
+            </DrawerFooter>
           </DrawerContent>
         </Drawer>
       </Box>

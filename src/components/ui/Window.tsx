@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, BoxProps, Flex } from "@chakra-ui/react";
+import { Box, BoxProps, Flex, Tooltip } from "@chakra-ui/react";
 
 import { formatPosition } from "./utils";
 import {
@@ -67,10 +67,12 @@ const Window = ({
         justifyContent={"space-between"}
       >
         <Box>
-          <ChevronLeftIcon
-            cursor="pointer"
-            onClick={() => handleWidthChange(-1)}
-          />
+          <Tooltip label={w as string}>
+            <ChevronLeftIcon
+              cursor="pointer"
+              onClick={() => handleWidthChange(-1)}
+            />
+          </Tooltip>
           <ChevronRightIcon
             cursor="pointer"
             onClick={() => handleWidthChange(1)}
