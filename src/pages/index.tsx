@@ -1,4 +1,4 @@
-import Guitar from "@/components/Guitar";
+import Guitar from "@/components/LegacyGuitar";
 import Piano from "@/components/Piano";
 import ScaleSelector from "@/components/ScaleSelector";
 import SelectedNotes from "@/components/SelectedNotes";

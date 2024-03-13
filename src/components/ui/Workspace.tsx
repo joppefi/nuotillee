@@ -30,7 +30,7 @@ import { v4 as uuidv4 } from "uuid";
 import { formatPosition } from "./utils";
 
 import Window from "./Window";
-import Guitar from "../Guitar";
+import Guitar from "../LegacyGuitar";
 import TextBox from "../TextBox";
 import YoutubeEmbed from "../YoutubeEmbed";
 import { WindowComponentProps } from "../types";
