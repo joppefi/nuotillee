@@ -25,19 +25,3 @@ const NoteBadgeStack = ({ notes }: NoteBadgeProps) => {
 };
 
 export default NoteBadgeStack;
-
-export const NoteBadge = ({ note }: NoteBadgeProps) => {
-  return (
-    <Box>
-      <Tag
-        size="lg"
-        key={note}
-        borderRadius="full"
-        bgColor={getNoteColor(note)}
-        color="black"
-      >
-        {note}
-      </Tag>
-    </Box>
-  );
-};

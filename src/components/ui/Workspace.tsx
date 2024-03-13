@@ -64,6 +64,7 @@ type Window<Type extends WindowType, State> = {
     y: number;
   };
   w?: BoxProps["w"];
+  locked?: boolean;
   type: Type;
   state?: State;
 };
