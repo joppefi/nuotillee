@@ -42,7 +42,7 @@ type NoteBadgeProps = {
   note: string;
 };
 
-const NoteBadge = ({ note }: NoteBadgeProps) => {
+export const NoteBadge = ({ note }: NoteBadgeProps) => {
   return (
     <Box>
       <Tag

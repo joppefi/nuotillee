@@ -1,4 +1,4 @@
-import { generateNotes, Note, NoteName } from "@/utils/notes";
+import { generateNotes, Note } from "@/utils/notes";
 import {
   Box,
   Flex,
@@ -17,9 +17,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import React from "react";
-import NoteBadgeStack from "./NoteBadgeStack";
-import { SelectionStatus } from "./SelectedContext";
-import { WindowComponentProps } from "./types";
+import { SelectionStatus, useSelections } from "./SelectedContext";
 
 const tuning = ["E4", "B3", "G3", "D3", "A2", "E2"];
 const fretCount = 24;
@@ -37,70 +35,39 @@ type Position = {
   end: number;
 };
 
-type GuitarState = {
-  selectedNotes?: NoteName[];
-};
+const Guitar = () => {
+  const [selectedOnly, setSelectedOnly] = useBoolean(true);
+  const [showDegree, setShowDegree] = useBoolean();
 
-type GuitarProps = WindowComponentProps<GuitarState>;
-
-const Guitar = ({ state, onStateChange }: GuitarProps) => {
-  const selectedNotes = state.selectedNotes || [];
-
-  const [visibleFrets, setVisibleFrets] = React.useState<Position>({
+  const [positions, setPositions] = React.useState<Position>({
     start: 0,
     end: fretCount,
   });
 
-  const handleNoteClick = (note: Note) => {
-    const noteIndex = selectedNotes.indexOf(note.name);
-
-    if (noteIndex > -1) {
-      if (noteIndex === selectedNotes.length - 1) {
-        const newNotes = selectedNotes.filter((n) => n !== note.name);
-        onStateChange({ selectedNotes: newNotes });
-      }
-    } else {
-      const newNotes = [...selectedNotes, note.name];
-      onStateChange({ selectedNotes: newNotes });
-    }
-  };
-
-  const visibleFretsSliderMargin = 100 / (fretCount + 1) / 2;
+  const positionSliderMargin = 100 / (fretCount + 1) / 2;
 
   return (
-    <VStack w="full" alignItems={"flex-start"}>
-      <NoteBadgeStack notes={selectedNotes} />
+    <VStack w="full" id="guitar">
       <HStack spacing={0} mt="10" w="full" alignItems="flex-end" padding="2">
-        {frets.map((notes, fretNo) => (
+        {frets.map((notes, index) => (
           <Fret
-            key={fretNo}
+            key={index}
             notes={notes}
-            open={fretNo === 0}
-            number={fretNo}
-            hidden={fretNo < visibleFrets.start || fretNo > visibleFrets.end}
-          >
-            {(note) => {
-              const degree = selectedNotes.indexOf(note.name) + 1;
-              return (
-                <Note
-                  note={note}
-                  selectionStatus={{ tonic: false, selected: true }}
-                  onClick={handleNoteClick}
-                  selected={degree > 0}
-                  supText={degree}
-                />
-              );
-            }}
-          </Fret>
+            open={index === 0}
+            number={index}
+            selectedOnly={selectedOnly}
+            showDegree={showDegree}
+            hidden={index < positions.start || index > positions.end}
+          />
         ))}
       </HStack>
-      <Box w="full" px={`${visibleFretsSliderMargin}%`}>
+      <Box w="full" px={`${positionSliderMargin}%`}>
         <RangeSlider
-          value={[visibleFrets.start, visibleFrets.end]}
+          value={[positions.start, positions.end]}
           min={0}
           max={fretCount}
-          onChange={([start, end]) => setVisibleFrets({ start, end })}
-          onDoubleClick={() => setVisibleFrets({ start: 0, end: fretCount })}
+          onChange={([start, end]) => setPositions({ start, end })}
+          onDoubleClick={() => setPositions({ start: 0, end: fretCount })}
         >
           <RangeSliderTrack>
             <RangeSliderFilledTrack />
@@ -109,6 +76,14 @@ const Guitar = ({ state, onStateChange }: GuitarProps) => {
           <RangeSliderThumb index={1} />
         </RangeSlider>
       </Box>
+      <FormControl display="flex" alignItems="center">
+        <FormLabel>Show selected notes only</FormLabel>
+        <Switch isChecked={selectedOnly} onChange={setSelectedOnly.toggle} />
+      </FormControl>
+      <FormControl display="flex" alignItems="center">
+        <FormLabel>Show scale degrees</FormLabel>
+        <Switch isChecked={showDegree} onChange={setShowDegree.toggle} />
+      </FormControl>
     </VStack>
   );
 };
@@ -119,13 +94,22 @@ type FretProps = {
   notes: Note[];
   open: boolean;
   number: number;
+  selectedOnly?: boolean;
   hidden?: boolean;
-  children: (note: Note) => React.ReactNode;
+  showDegree?: boolean;
 };
 
 const fretMarks = [3, 5, 7, 9, 12, 15, 17, 19, 21, 24];
 
-const Fret = ({ notes, open, number, hidden, children }: FretProps) => {
+const Fret = ({
+  notes,
+  open,
+  number,
+  selectedOnly,
+  showDegree,
+  hidden,
+}: FretProps) => {
+  const { setSelectedNote, checkSelected } = useSelections();
   const markedFret = fretMarks.indexOf(number) > -1;
 
   const fretWidth = 100 / fretCount + 1;
@@ -164,7 +148,14 @@ const Fret = ({ notes, open, number, hidden, children }: FretProps) => {
             w="full"
             h="full"
           >
-            {hidden ? undefined : children(note)}
+            <Note
+              note={note}
+              showDegree={showDegree}
+              selectionStatus={checkSelected(note)}
+              onClick={() => setSelectedNote(note.formatted)}
+              visible={!selectedOnly}
+              hidden={hidden}
+            ></Note>
           </Flex>
         </Flex>
       ))}
@@ -187,35 +178,29 @@ const Fret = ({ notes, open, number, hidden, children }: FretProps) => {
 };
 
 type NoteProps = {
-  selected?: boolean;
-  tonic?: boolean;
   selectionStatus: SelectionStatus;
-  visible?: boolean;
+  visible: boolean;
   hidden?: boolean;
   showDegree?: boolean;
-  onClick: (note: Note) => void;
+  onClick: () => void;
   note: Note;
-  supText?: string | number;
 };
 
 const Note = ({
-  selected,
-  tonic,
   selectionStatus,
   onClick,
   note,
   visible,
   hidden,
   showDegree,
-  supText,
 }: NoteProps) => {
-  const { degree } = selectionStatus;
+  const { selected, tonic, degree } = selectionStatus;
   const tonicColor = useColorModeValue("black", "white");
 
   return (
     <Tooltip label={note.formatted} placement="top">
       <Flex
-        onClick={() => onClick(note)}
+        onClick={onClick}
         // Rest
         justifyContent="center"
         alignItems="center"
@@ -239,7 +224,6 @@ const Note = ({
             borderRadius="full"
           >
             {(visible || selected) && (showDegree ? degree : note.name)}
-            {selected && supText ? <sup>{supText}</sup> : undefined}
           </Flex>
         )}
       </Flex>
