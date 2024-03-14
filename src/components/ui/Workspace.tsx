@@ -164,7 +164,6 @@ const Workspace = ({ initialConfig, onExit }: PanHandlerProps) => {
       };
 
       setConfig(newConfig);
-      saveConfig(newConfig);
     }
   };
 
@@ -237,7 +236,6 @@ const Workspace = ({ initialConfig, onExit }: PanHandlerProps) => {
       }),
     };
     setConfig(newConfig);
-    saveConfig(newConfig);
   };
 
   const handleComponentStateChange = ({
@@ -260,7 +258,6 @@ const Workspace = ({ initialConfig, onExit }: PanHandlerProps) => {
       }),
     };
     setConfig(newConfig);
-    saveConfig(newConfig);
   };
 
   const handleDeleteComponent = (id: string) => {
@@ -269,7 +266,6 @@ const Workspace = ({ initialConfig, onExit }: PanHandlerProps) => {
       windows: config.windows.filter((window) => window.id !== id),
     };
     setConfig(newConfig);
-    saveConfig(newConfig);
   };
 
   const handleWidthChange = (w: BoxProps["w"], id: string) => {
@@ -286,7 +282,6 @@ const Workspace = ({ initialConfig, onExit }: PanHandlerProps) => {
       }),
     };
     setConfig(newConfig);
-    saveConfig(newConfig);
   };
 
   const handleWindowLock = (id: string) => {
@@ -303,7 +298,6 @@ const Workspace = ({ initialConfig, onExit }: PanHandlerProps) => {
       }),
     };
     setConfig(newConfig);
-    saveConfig(newConfig);
   };
 
   const handleTitle = (title: string) => {
@@ -313,11 +307,6 @@ const Workspace = ({ initialConfig, onExit }: PanHandlerProps) => {
       title,
     };
     setConfig(newConfig);
-    saveConfig(newConfig);
-  };
-
-  const saveConfig = (config: Config) => {
-    window.localStorage.setItem("nuotillee-config", JSON.stringify(config));
   };
 
   const handleApiSave = async () => {
