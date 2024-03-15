@@ -2,17 +2,13 @@ import { generateNotes, Note, NoteName } from "@/utils/notes";
 import {
   Box,
   Flex,
-  FormControl,
-  FormLabel,
   HStack,
   RangeSlider,
   RangeSliderFilledTrack,
   RangeSliderThumb,
   RangeSliderTrack,
-  Switch,
   Text,
   Tooltip,
-  useBoolean,
   useColorModeValue,
   VStack,
 } from "@chakra-ui/react";
@@ -44,7 +40,7 @@ type GuitarState = {
 type GuitarProps = WindowComponentProps<GuitarState>;
 
 const Guitar = ({ state, onStateChange }: GuitarProps) => {
-  const selectedNotes = state.selectedNotes || [];
+  const selectedNotes = state?.selectedNotes || [];
 
   const [visibleFrets, setVisibleFrets] = React.useState<Position>({
     start: 0,

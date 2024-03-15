@@ -1,4 +1,4 @@
 export type WindowComponentProps<State> = {
-  state: State;
+  state?: State;
   onStateChange: (state: State) => void;
 };
